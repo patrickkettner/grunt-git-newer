@@ -55,8 +55,18 @@ function createTask(grunt, base, branch) {
 
     var originalConfig = grunt.config.get([taskName, targetName]);
     var config = grunt.util._.clone(originalConfig);
+    var diff = _spawnSync('git', ['diff', '--name-only', 'masters']);
 
-    var diff = spawnSync('git', ['diff', '--name-only', 'master'], grunt);
+    if (diff.status !== 0) {
+      diff = _spawnSync('git', ['diff', '--name-only', 'origin/master']);
+    }
+
+    if (diff.status !== 0) {
+      return grunt.fatal(diff.stderr.toString());
+    }
+
+    diff = diff.stdout.toString();
+
     diff = grunt.util._.compact(diff.split(grunt.util.linefeed)).map(function(file) {
       return base + file;
     });
@@ -76,7 +86,6 @@ function createTask(grunt, base, branch) {
     done();
   };
 }
-
 
 module.exports = function(grunt) {
 
