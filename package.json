@@ -21,6 +21,6 @@
     "grunt": "~0.4.2"
   },
   "dependencies": {
-    "spawn-sync": "^1.0.0"
+    "runsync": "^0.1.8"
   }
 }

@@ -8,7 +8,7 @@
 
 'use strict';
 var path = require('path');
-var _spawnSync = require('child_process').spawnSync || require('spawn-sync');
+var _spawnSync = require('child_process').spawnSync || require('runsync').spawn;
 
 function spawnSync(command, args, grunt) {
   var result = _spawnSync(command, args);
