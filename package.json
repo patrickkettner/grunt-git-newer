@@ -1,6 +1,6 @@
 {
   "name": "grunt-git-newer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "like grunt-newer, but for git-commits",
   "homepage": "https://github.com/patrickkettner/grunt-git-newer",
   "repository": "https://github.com/patrickkettner/grunt-git-newer.git",

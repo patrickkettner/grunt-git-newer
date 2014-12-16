@@ -23,6 +23,7 @@ you can use
 
 ## Release History
 1.0.0 - Initial Release
+1.0.2 - Swap out synchronous spawn module, add branch name fallback for master
 
 ## License
 Copyright (c) 2014 Patrick Kettner. Licensed under the MIT license.
