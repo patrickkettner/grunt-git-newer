@@ -8,7 +8,36 @@
 
 'use strict';
 var path = require('path');
-var _spawnSync = require('child_process').spawnSync || require('runsync').spawn;
+var exec = require('child_process').exec;
+var path = require('path');
+var os = require('os');
+var fs = require('fs');
+var logFileDir = path.normalize(path.join(os.tmpdir(), String(process.pid)));
+
+function _spawnSync(command, args) {
+  var stdout = logFileDir + '-stdout';
+  var stderr = logFileDir + '-stderr';
+  var status = logFileDir + '-status';
+  var response = {};
+
+  exec(command + ' ' + args.join(' ') + ' > ' + stdout + ' 2> ' + stderr + '; echo $? > ' + status);
+
+  while (!fs.existsSync(status)) {}
+
+  response.stdout = fs.readFileSync(stdout) || '';
+  response.stderr = fs.readFileSync(stderr) || '';
+  response.status = parseInt(fs.readFileSync(status));
+
+  try {
+    fs.unlinkSync(stdout);
+    fs.unlinkSync(stderr);
+    fs.unlinkSync(status);
+  } catch(e) {}
+
+  return response;
+}
+
+_spawnSync = require('child_process').spawnSync || _spawnSync;
 
 function spawnSync(command, args, grunt) {
   var result = _spawnSync(command, args);
@@ -55,7 +84,7 @@ function createTask(grunt, base, branch) {
 
     var originalConfig = grunt.config.get([taskName, targetName]);
     var config = grunt.util._.clone(originalConfig);
-    var diff = _spawnSync('git', ['diff', '--name-only', 'masters']);
+    var diff = _spawnSync('git', ['diff', '--name-only', 'master']);
 
     if (diff.status !== 0) {
       diff = _spawnSync('git', ['diff', '--name-only', 'origin/master']);
