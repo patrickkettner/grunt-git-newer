@@ -42,7 +42,7 @@ _spawnSync = require('child_process').spawnSync || _spawnSync;
 function spawnSync(command, args, grunt) {
   var result = _spawnSync(command, args);
   if (result.status !== 0) {
-    return grunt.fatal(result.stderr.toString());
+    return grunt.fatal('grunt-git-newer: spawnSync returned non zero status (' + result.status + ') - ' + result.stderr.toString());
   }
   return result.stdout.toString();
 }
@@ -91,7 +91,7 @@ function createTask(grunt, base, branch) {
     }
 
     if (diff.status !== 0) {
-      return grunt.fatal(diff.stderr.toString());
+      return grunt.fatal('grunt-git-newer: spawnSync returned non zero status (' + diff.status + ') when determining diff - ' + diff.stderr.toString());
     }
 
     diff = diff.stdout.toString();
